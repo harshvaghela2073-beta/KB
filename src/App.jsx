@@ -32,13 +32,16 @@ function App() {
 
   const isProposalPage = currentPage >= totalStoryPages;
 
+  // Get current song — first page's song on start, then the active page's song
+  const currentSong = storyPages[Math.min(currentPage, totalStoryPages - 1)]?.song;
+
   return (
     <>
       {/* Animated gradient background */}
       <div className="app-background" />
 
       {/* Background music — starts on first click (the Start button) */}
-      <BackgroundMusic />
+      <BackgroundMusic currentSong={currentSong} />
 
       {/* Floating hearts / sparkles */}
       <FloatingHearts />

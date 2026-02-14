@@ -207,7 +207,7 @@ function ProposalPage() {
         ref={cardRef}
         className={`proposal-card ${visible ? 'fade-enter-active' : 'fade-enter'}`}
       >
-        <h1 className="proposal-title">Will ask to be make a best of memories together? 💝</h1>
+        <h1 className="proposal-title">Will you tolerate my tak tak, chaos, kich kich for this life ? 💝</h1>
 
         <div className="proposal-buttons">
           {/* ── YES button ── */}

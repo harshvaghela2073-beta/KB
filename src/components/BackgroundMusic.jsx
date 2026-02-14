@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
-import song from '../assets/songs/tane_joy_me_jyaarthi.mp3';
 
 /**
- * BackgroundMusic — Plays a single song on infinite loop.
+ * BackgroundMusic — Plays a song per page on loop.
  *
- * - Starts on the user's first click/tap anywhere on the page.
+ * Props:
+ *   currentSong — imported audio URL for the current page
+ *
+ * - Starts on the user's first click/tap (the Start button).
+ * - Switches song when the page changes.
  * - Shows a small speaker icon (top-right) to mute / unmute.
  */
 
-function BackgroundMusic() {
+function BackgroundMusic({ currentSong }) {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -19,7 +22,7 @@ function BackgroundMusic() {
     if (!audio) return;
 
     const startPlayback = () => {
-      if (!audio.paused) return; // already playing
+      if (!audio.paused) return;
       audio.play().then(() => setPlaying(true)).catch(() => {});
     };
 
@@ -32,8 +35,22 @@ function BackgroundMusic() {
     };
   }, []);
 
+  // Switch song when currentSong changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentSong) return;
+
+    audio.src = currentSong;
+    audio.load();
+
+    // If already playing, continue with the new song
+    if (playing) {
+      audio.play().catch(() => {});
+    }
+  }, [currentSong]);
+
   const toggleMute = (e) => {
-    e.stopPropagation(); // don't count as the "first click" twice
+    e.stopPropagation();
     const audio = audioRef.current;
     if (!audio) return;
     audio.muted = !audio.muted;
@@ -42,7 +59,7 @@ function BackgroundMusic() {
 
   return (
     <>
-      <audio ref={audioRef} src={song} loop preload="auto" />
+      <audio ref={audioRef} loop preload="auto" />
 
       {playing && (
         <button
